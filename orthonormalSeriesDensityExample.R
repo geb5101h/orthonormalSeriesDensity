@@ -1,6 +1,7 @@
 rm(list=ls())
 source("./orthonormalSeriesDensity.R")
 
+set.seed(12324)
 J=5
 n=1000
 #simulate a mixture of two Gaussians
