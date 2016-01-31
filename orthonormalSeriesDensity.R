@@ -16,8 +16,8 @@ orthonormalSeriesDensity<- function(data,J){
   plotDensityFn<- function(points){
     (1:J)%>%sapply(.,function(j) cosineBasis(points,j) * orthCoeffs[j] )%>%
       apply(.,1,sum) + 1
-                     
-    }
+  }
+  
   predictions<- plotDensityFn(data)
 
   curve(plotDensityFn,0,1,ylim=c(0,max(predictions)*1.001))
