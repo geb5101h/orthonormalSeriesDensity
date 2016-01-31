@@ -4,18 +4,21 @@ library(magrittr)
 # Orthogonal series density estimator
 # of Efromovich, 1999
 # Currently supports cosine basis
-orthonormalSeriesDensity <- function(data,J) {
+orthonormalSeriesDensity <- function(data) {
   if (data %>% min < 0 | data %>% max > 1) {
     stop("Data needs to be scaled within [0,1]")
   }
   
   n = data%>%length
-  
+  Jn = floor(4+0.5*log(n))
   # Get coefficients
-  orthCoeffs <- (1:J) %>% sapply(.,function(j)
+  orthCoeffs <- (1:Jn) %>% sapply(.,function(j)
     cosineBasis(data,j)) %>%
     apply(.,2,mean)
   
+  Jrange = (1:Jn)%>%sapply(.,function(j){2/n - orthCoeffs[j]^2})
+  Jn = Jrange%>%cumsum%>%which.min
+  print(paste("J chosen to be",Jn))
   # Get smoothing coefficients
   smooth<- (1-1/(n*orthCoeffs^2))%>%sapply(.,function(x)max(0,x))
   
