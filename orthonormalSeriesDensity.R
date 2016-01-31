@@ -18,9 +18,10 @@ orthonormalSeriesDensity<- function(data,J){
       apply(.,1,sum) + 1
                      
     }
-    curve(plotDensityFn,0,1,ylim=c(0,1.5))
+  predictions<- plotDensityFn(data)
+
+  curve(plotDensityFn,0,1,ylim=c(0,max(predictions)*1.001))
     
-    plotDensityFn(data)
 }
 
 # Basis elements for cosine 
