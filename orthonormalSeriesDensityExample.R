@@ -10,5 +10,6 @@ x= rnorm(n,.3,.1)*y + rnorm(n,.7,.1)*(1-y)
 x[x>=1] = 1; x[x<=0]=0
 
 par(mfcol=c(2,1))
-predictions<- orthonormalSeriesDensity(x)
+predictions<- orthonormalSeriesDensity(x,highFreq=T)
 hist(x,breaks=25)
+

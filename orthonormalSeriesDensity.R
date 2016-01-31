@@ -11,7 +11,7 @@ orthonormalSeriesDensity <- function(data,highFreq = F) {
   
   n = data %>% length
   Jn = floor(4 + 0.5 * log(n))
-  Jmax = 6 * Jn
+  Jmax = ifelse(highFreq==T,6 * Jn,Jn)
   # Get coefficients
   orthCoeffs <- (1:Jmax) %>% sapply(.,function(j)
     cosineBasis(data,j)) %>%
@@ -29,7 +29,7 @@ orthonormalSeriesDensity <- function(data,highFreq = F) {
   
   plotDensityFn <- function(points) {
     (1:Jmax) %>% sapply(.,function(j) {
-      if (j <= Jn) {
+      if (j <= Jselect) {
         cosineBasis(points,j) * orthCoeffs[j] * smooth[j]
       }
       else
