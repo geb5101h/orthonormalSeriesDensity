@@ -4,14 +4,17 @@ library(magrittr)
 # Orthogonal series density estimator
 # of Efromovich, 1999
 # Currently supports cosine basis
-orthonormalSeriesDensity <- function(data,highFreq = F) {
+orthonormalSeriesDensity <- function(data,
+                                     highFreq = F,
+                                     confBand = T,
+                                     alpha = 0.95) {
   if (data %>% min < 0 | data %>% max > 1) {
     stop("Data needs to be scaled within [0,1]")
   }
   
   n = data %>% length
   Jn = floor(4 + 0.5 * log(n))
-  Jmax = ifelse(highFreq==T,6 * Jn,Jn)
+  Jmax = ifelse(highFreq == T,6 * Jn,Jn)
   # Get coefficients
   orthCoeffs <- (1:Jmax) %>% sapply(.,function(j)
     cosineBasis(data,j)) %>%
@@ -45,8 +48,34 @@ orthonormalSeriesDensity <- function(data,highFreq = F) {
   }
   
   predictions <- plotDensityFn(data)
-  
-  curve(plotDensityFn,0,1,ylim = c(0,max(predictions) * 1.001))
+  maxY = max(predictions)
+  if (confBand == T) {
+    cc <- 2 * sqrt(Jselect * qchisq(alpha,Jselect) / n)
+    f1 <- function(x){ plotDensityFn(x) - cc}
+    f2 <- function(x){  plotDensityFn(x) + cc}
+    maxY =  max(f2(data))
+  }
+  curve(
+    plotDensityFn,0,1,ylim = c(0,maxY),
+    xlab = paste("N=",n," Jn=",Jselect),
+    main = "Orthonormal density estimate"
+  )
+  if (confBand == T) {
+    curve(
+      f1,0,1,
+      xlab = paste("N=",n," Jn=",Jselect),
+      main = "Orthonormal density estimate",
+      add = T,
+      lty = 2
+    )
+    curve(
+      f2,0,1,
+      xlab = paste("N=",n," Jn=",Jselect),
+      main = "Orthonormal density estimate",
+      add = T,
+      lty = 2
+    )
+  }
   
   predictions
   
