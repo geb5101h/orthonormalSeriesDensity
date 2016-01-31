@@ -23,14 +23,14 @@ orthonormalSeriesDensity <- function(data) {
   smooth<- (1-1/(n*orthCoeffs^2))%>%sapply(.,function(x)max(0,x))
   
   plotDensityFn <- function(points) {
-    (1:J) %>% sapply(.,function(j)
+    (1:Jn) %>% sapply(.,function(j)
       cosineBasis(points,j) * orthCoeffs[j]*smooth[j]) %>%
       apply(.,1,sum) + 1
   }
   
   predictions <- plotDensityFn(data)
   
-  curve(plotDensityFn,0,1,,ylim = c(min(predictions),max(predictions) * 1.001))
+  curve(plotDensityFn,0,1,ylim = c(0,max(predictions) * 1.001))
   
   predictions
   
