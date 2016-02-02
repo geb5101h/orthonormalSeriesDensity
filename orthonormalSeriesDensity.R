@@ -64,14 +64,11 @@ orthonormalSeriesDensity <- function(data,
     curve(
       f1,0,1,
       xlab = paste("N=",n," Jn=",Jselect),
-      main = "Orthonormal density estimate",
       add = T,
       lty = 2
     )
     curve(
       f2,0,1,
-      xlab = paste("N=",n," Jn=",Jselect),
-      main = "Orthonormal density estimate",
       add = T,
       lty = 2
     )
